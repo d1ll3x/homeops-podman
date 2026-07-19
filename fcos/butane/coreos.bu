@@ -1,0 +1,7 @@
+variant: fcos
+version: 1.7.0
+passwd:
+  users:
+    - name: d1ll3x
+      ssh_authorized_keys:
+        - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIlYo/25hiuBE/m1ja6RLEbGO3y9QVmjNCKNycLW85GV

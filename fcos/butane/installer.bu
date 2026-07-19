@@ -1,0 +1,6 @@
+variant: fcos
+version: 1.7.0
+ignition:
+  config:
+    replace:
+      source: https://github.com/d1ll3x/homelab/fcos/ignition/coreos.ign
