@@ -12,12 +12,24 @@
       }
     ]
   },
+  "storage": {
+    "files": [
+      {
+        "path": "/usr/local/bin/install-qemu-guest-agent",
+        "contents": {
+          "compression": "",
+          "source": "data:;base64,IyEvdXNyL2Jpbi9lbnYgYmFzaApzZXQgLWV1byBwaXBlZmFpbAoKcnBtLW9zdHJlZSBpbnN0YWxsIHFlbXUtZ3Vlc3QtYWdlbnQgICAgICAgICAgCg=="
+        },
+        "mode": 493
+      }
+    ]
+  },
   "systemd": {
     "units": [
       {
-        "contents": "[Unit]\nDescription=Layer qemu-guest-agent with rpm-ostree\nWants=network-online.target\nAfter=network-online.target\nBefore=zincati.service\nConditionPathExists=!/var/lib/%N.stamp\n\n[Service]\nType=oneshot\nRemainAfterExit=yes\nExecStart=/usr/bin/rpm-ostree install -y --allow-inactive qemu-guest-agent\nExecStart=/bin/touch /var/lib/%N.stamp\nExecStart=/bin/systemctl --no-block reboot\n\n[Install]\nWantedBy=multi-user.target\n",
+        "contents": "[Unit]\nAfter=network-online.target\nWants=network-online.target\nBefore=systemd-user-sessions.service\nOnFailure=emergency.target\nOnFailureJobMode=replace-irreversibly\nConditionPathExists=!/var/lib/qemu-guest-agent-installed\n\n[Service]\nRemainAfterExit=yes\nType=oneshot\nExecStart=/usr/local/bin/install-qemu-guest-agent\nExecStartPost=/usr/bin/touch /var/lib/qemu-guest-agent-installed\nExecStartPost=/usr/bin/systemctl --no-block reboot\nStandardOutput=kmsg+console\nStandardError=kmsg+console\n\n[Install]\nWantedBy=multi-user.target\n",
         "enabled": true,
-        "name": "rpm-ostree-install-qemu-guest-agent.service"
+        "name": "install-qemu-guest-agent.service"
       }
     ]
   }

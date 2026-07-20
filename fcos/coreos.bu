@@ -5,24 +5,37 @@ passwd:
     - name: core
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIlYo/25hiuBE/m1ja6RLEbGO3y9QVmjNCKNycLW85GV
+storage:
+  files:
+    - path: /usr/local/bin/install-qemu-guest-agent
+      mode: 0755
+      contents:
+        inline: |
+          #!/usr/bin/env bash
+          set -euo pipefail
+
+          rpm-ostree install qemu-guest-agent          
 systemd:
   units:
-    - name: rpm-ostree-install-qemu-guest-agent.service
+    - name: install-qemu-guest-agent.service
       enabled: true
       contents: |
         [Unit]
-        Description=Layer qemu-guest-agent with rpm-ostree
-        Wants=network-online.target
         After=network-online.target
-        Before=zincati.service
-        ConditionPathExists=!/var/lib/%N.stamp
-
+        Wants=network-online.target
+        Before=systemd-user-sessions.service
+        OnFailure=emergency.target
+        OnFailureJobMode=replace-irreversibly
+        ConditionPathExists=!/var/lib/qemu-guest-agent-installed
+        
         [Service]
-        Type=oneshot
         RemainAfterExit=yes
-        ExecStart=/usr/bin/rpm-ostree install -y --allow-inactive qemu-guest-agent
-        ExecStart=/bin/touch /var/lib/%N.stamp
-        ExecStart=/bin/systemctl --no-block reboot
+        Type=oneshot
+        ExecStart=/usr/local/bin/install-qemu-guest-agent
+        ExecStartPost=/usr/bin/touch /var/lib/qemu-guest-agent-installed
+        ExecStartPost=/usr/bin/systemctl --no-block reboot
+        StandardOutput=kmsg+console
+        StandardError=kmsg+console
 
         [Install]
         WantedBy=multi-user.target
