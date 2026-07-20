@@ -1,6 +1,6 @@
 # Fedora CoreOS Ignition Configuration
 
-This directory contains the Butane source files and generated Ignition files for Fedora CoreOS deployments.
+This directory contains the Butane source file and generated Ignition file for Fedora CoreOS deployments on Proxmox VE.
 
 ## Generate Ignition files
 
@@ -11,7 +11,8 @@ This directory contains the Butane source files and generated Ignition files for
 ./build.sh
 ```
 
-## Finalizing installation
+## Prepare Proxmox VE
 
-Refer to `installer.ign` in your installation to pull `coreos.ign` from Github.
+We need to let Proxmox pass the ignition file to our virtual machine. We can do this through cloud-init and by using snippets.
 
+Follow [the official instructions](https://docs.fedoraproject.org/en-US/fedora-coreos/provisioning-proxmoxve) to set this up.

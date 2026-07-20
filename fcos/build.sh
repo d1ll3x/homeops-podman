@@ -13,12 +13,12 @@ else
 fi
 
 # Generate Ignition files
-for config in installer coreos; do
+for config in coreos; do
   echo "Generating ${config}.ign..."
 
   "$runtime" run -i --rm quay.io/coreos/butane:release \
-    --pretty --strict < "./butane/${config}.bu" > "./ignition/${config}.ign"
-  echo "SUCCESS! ./ignition/${config}.ign"
+    --pretty --strict < "./${config}.bu" > "./${config}.ign"
+  echo "SUCCESS! ./${config}.ign"
 done
 
 echo "Finished generating ignition files"

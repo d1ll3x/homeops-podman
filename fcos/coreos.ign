@@ -5,7 +5,7 @@
   "passwd": {
     "users": [
       {
-        "name": "d1ll3x",
+        "name": "core",
         "sshAuthorizedKeys": [
           "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIlYo/25hiuBE/m1ja6RLEbGO3y9QVmjNCKNycLW85GV"
         ]
