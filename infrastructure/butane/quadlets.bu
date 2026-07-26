@@ -5,7 +5,7 @@ storage:
     - path: /var/home/core/.config/containers/systemd/z2m.container
       mode: 0644
       contents:
-        source: https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/apps/z2m/z2m.container
+        source: https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/quadlets/z2m.container
 
 systemd:
   units:
