@@ -4,10 +4,9 @@ storage:
   files:
     - path: /var/home/core/.config/containers/systemd/z2m.container
       mode: 0644
+      user:
+        name: core
+      group:
+        name: core
       contents:
         source: https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/quadlets/z2m.container
-
-systemd:
-  units:
-    - name: zigbee2mqtt.service
-      enabled: true

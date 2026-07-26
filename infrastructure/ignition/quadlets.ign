@@ -5,19 +5,17 @@
   "storage": {
     "files": [
       {
+        "group": {
+          "name": "core"
+        },
         "path": "/var/home/core/.config/containers/systemd/z2m.container",
+        "user": {
+          "name": "core"
+        },
         "contents": {
           "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/quadlets/z2m.container"
         },
         "mode": 420
-      }
-    ]
-  },
-  "systemd": {
-    "units": [
-      {
-        "enabled": true,
-        "name": "zigbee2mqtt.service"
       }
     ]
   }
