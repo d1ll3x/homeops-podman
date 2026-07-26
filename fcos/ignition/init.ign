@@ -3,10 +3,10 @@
     "config": {
       "merge": [
         {
-          "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/infrastructure/ignition/base.ign"
+          "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/fcos/ignition/base.ign"
         },
         {
-          "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/infrastructure/ignition/quadlets.ign"
+          "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/fcos/ignition/quadlets.ign"
         }
       ]
     },
