@@ -1,0 +1,52 @@
+{
+  "ignition": {
+    "version": "3.6.0"
+  },
+  "passwd": {
+    "users": [
+      {
+        "name": "core",
+        "sshAuthorizedKeys": [
+          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIlYo/25hiuBE/m1ja6RLEbGO3y9QVmjNCKNycLW85GV"
+        ]
+      }
+    ]
+  },
+  "storage": {
+    "directories": [
+      {
+        "group": {
+          "name": "core"
+        },
+        "path": "/var/home/core/.config/containers/systemd",
+        "user": {
+          "name": "core"
+        },
+        "mode": 448
+      }
+    ],
+    "files": [
+      {
+        "path": "/var/lib/systemd/linger/core",
+        "mode": 420
+      },
+      {
+        "path": "/usr/local/bin/qemu-guest-agent",
+        "contents": {
+          "compression": "",
+          "source": "data:,%23!%2Fusr%2Fbin%2Fenv%20bash%0Aset%20-euo%20pipefail%0Arpm-ostree%20install%20qemu-guest-agent%0A"
+        },
+        "mode": 493
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nAfter=network-online.target\nWants=network-online.target\nBefore=systemd-user-sessions.service\nOnFailure=emergency.target\nOnFailureJobMode=replace-irreversibly\nConditionPathExists=!/var/lib/qemu-guest-agent-installed\n\n[Service]\nRemainAfterExit=yes\nType=oneshot\nExecStart=/usr/local/bin/qemu-guest-agent\nExecStartPost=/usr/bin/touch /var/lib/qemu-guest-agent-installed\nExecStartPost=/usr/bin/systemctl --no-block reboot\nStandardOutput=kmsg+console\nStandardError=kmsg+console\n\n[Install]\nWantedBy=multi-user.target\n",
+        "enabled": true,
+        "name": "qemu-guest-agent.service"
+      }
+    ]
+  }
+}

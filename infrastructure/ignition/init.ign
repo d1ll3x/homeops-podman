@@ -1,0 +1,15 @@
+{
+  "ignition": {
+    "config": {
+      "merge": [
+        {
+          "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/infrastructure/ignition/base.ign"
+        },
+        {
+          "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/infrastructure/ignition/quadlets.ign"
+        }
+      ]
+    },
+    "version": "3.6.0"
+  }
+}

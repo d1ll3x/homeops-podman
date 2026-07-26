@@ -1,0 +1,24 @@
+{
+  "ignition": {
+    "version": "3.6.0"
+  },
+  "storage": {
+    "files": [
+      {
+        "path": "/var/home/core/.config/containers/systemd/z2m.container",
+        "contents": {
+          "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/apps/z2m/z2m.container"
+        },
+        "mode": 420
+      }
+    ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "enabled": true,
+        "name": "zigbee2mqtt.service"
+      }
+    ]
+  }
+}
