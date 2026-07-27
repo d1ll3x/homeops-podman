@@ -13,7 +13,20 @@
           "name": "core"
         },
         "contents": {
-          "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/quadlets/z2m.container"
+          "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/quadlets/z2m/z2m.container"
+        },
+        "mode": 384
+      },
+      {
+        "group": {
+          "name": "core"
+        },
+        "path": "/var/home/core/.config/containers/systemd/iot.network",
+        "user": {
+          "name": "core"
+        },
+        "contents": {
+          "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/quadlets/networks/iot.network"
         },
         "mode": 420
       }

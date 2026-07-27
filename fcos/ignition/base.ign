@@ -18,6 +18,26 @@
         "group": {
           "name": "core"
         },
+        "path": "/var/home/core/.config",
+        "user": {
+          "name": "core"
+        },
+        "mode": 448
+      },
+      {
+        "group": {
+          "name": "core"
+        },
+        "path": "/var/home/core/.config/containers",
+        "user": {
+          "name": "core"
+        },
+        "mode": 448
+      },
+      {
+        "group": {
+          "name": "core"
+        },
         "path": "/var/home/core/.config/containers/systemd",
         "user": {
           "name": "core"
