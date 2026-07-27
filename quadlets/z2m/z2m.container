@@ -6,17 +6,8 @@ After=network-online.target
 ContainerName=z2m
 Image=docker.io/koenkk/zigbee2mqtt:latest
 PublishPort=8080:8080
-Volume=z2m:/app/data:rw:Z
-Network=iot-network
-
-[Volume]
-VolumeName=z2m
-Label=service=home-automation
-Driver=local
-
-[Network]
-NetworkName=iot
-Label=service=home-automation
+Volume=z2m:/app/data:Z
+Network=iot.network
 
 [Service]
 Restart=always

@@ -33,11 +33,17 @@ systemd:
 
 storage:
   directories:
+    - path: /var/home/core/.config
+      user: { name: core }
+      group: { name: core }
+      mode: 0700
+    - path: /var/home/core/.config/containers
+      user: { name: core }
+      group: { name: core }
+      mode: 0700
     - path: /var/home/core/.config/containers/systemd
-      user:
-        name: core
-      group:
-        name: core
+      user: { name: core }
+      group: { name: core }
       mode: 0700
 
   files:

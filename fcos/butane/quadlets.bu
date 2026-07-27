@@ -3,10 +3,15 @@ version: 1.7.0
 storage:
   files:
     - path: /var/home/core/.config/containers/systemd/z2m.container
-      mode: 0644
-      user:
-        name: core
-      group:
-        name: core
+      mode: 0600
+      user: { name: core }
+      group: { name: core }
       contents:
-        source: https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/quadlets/z2m.container
+        source: https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/quadlets/z2m/z2m.container
+
+    - path: /var/home/core/.config/containers/systemd/iot.network
+      mode: 0644
+      user: { name: core }
+      group: { name: core }
+      contents:
+        source: https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/quadlets/networks/iot.network
