@@ -24,38 +24,24 @@ storage:
   files:
     - path: /var/lib/systemd/linger/core
       mode: 0644
-    - path: /usr/local/bin/qemu-guest-agent
-      mode: 0755
-      contents:
-        inline: |
-          #!/usr/bin/env bash
-          set -euo pipefail
-          rpm-ostree install qemu-guest-agent
 
 systemd:
   units:
-    - name: qemu-guest-agent.service
+    - name: "install-qemu-guest-agent.service"
       enabled: true
       contents: |
         [Unit]
-        After=network-online.target
+        Description=Ensure qemu-guest-agent is installed
         Wants=network-online.target
-        Before=systemd-user-sessions.service
-        OnFailure=emergency.target
-        OnFailureJobMode=replace-irreversibly
-        ConditionPathExists=!/var/lib/qemu-guest-agent-installed
+        After=network-online.target
+        Before=zincati.service
+        ConditionPathExists=!/var/lib/%N.stamp
 
         [Service]
-        RemainAfterExit=yes
         Type=oneshot
-        ExecStart=/usr/local/bin/qemu-guest-agent
-        ExecStartPost=/usr/bin/touch /var/lib/qemu-guest-agent-installed
-        ExecStartPost=/usr/bin/systemctl --no-block reboot
-        StandardOutput=kmsg+console
-        StandardError=kmsg+console
+        RemainAfterExit=yes
+        ExecStart=rpm-ostree install --allow-inactive --assumeyes --reboot qemu-guest-agent
+        ExecStart=/bin/touch /var/lib/%N.stamp
 
         [Install]
         WantedBy=multi-user.target
-
-
-
