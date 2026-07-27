@@ -6,31 +6,6 @@ passwd:
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIlYo/25hiuBE/m1ja6RLEbGO3y9QVmjNCKNycLW85GV
 
-systemd:
-  units:
-    - name: qemu-guest-agent.service
-      enabled: true
-      contents: |
-        [Unit]
-        After=network-online.target
-        Wants=network-online.target
-        Before=systemd-user-sessions.service
-        OnFailure=emergency.target
-        OnFailureJobMode=replace-irreversibly
-        ConditionPathExists=!/var/lib/qemu-guest-agent-installed
-
-        [Service]
-        RemainAfterExit=yes
-        Type=oneshot
-        ExecStart=/usr/local/bin/qemu-guest-agent
-        ExecStartPost=/usr/bin/touch /var/lib/qemu-guest-agent-installed
-        ExecStartPost=/usr/bin/systemctl --no-block reboot
-        StandardOutput=kmsg+console
-        StandardError=kmsg+console
-
-        [Install]
-        WantedBy=multi-user.target
-
 storage:
   directories:
     - path: /var/home/core/.config
@@ -56,4 +31,31 @@ storage:
           #!/usr/bin/env bash
           set -euo pipefail
           rpm-ostree install qemu-guest-agent
+
+systemd:
+  units:
+    - name: qemu-guest-agent.service
+      enabled: true
+      contents: |
+        [Unit]
+        After=network-online.target
+        Wants=network-online.target
+        Before=systemd-user-sessions.service
+        OnFailure=emergency.target
+        OnFailureJobMode=replace-irreversibly
+        ConditionPathExists=!/var/lib/qemu-guest-agent-installed
+
+        [Service]
+        RemainAfterExit=yes
+        Type=oneshot
+        ExecStart=/usr/local/bin/qemu-guest-agent
+        ExecStartPost=/usr/bin/touch /var/lib/qemu-guest-agent-installed
+        ExecStartPost=/usr/bin/systemctl --no-block reboot
+        StandardOutput=kmsg+console
+        StandardError=kmsg+console
+
+        [Install]
+        WantedBy=multi-user.target
+
+
 
