@@ -2,31 +2,32 @@
 
 This is a mono repository for my podman driven home infrastructure. The goal is to implement Infrastructure as Code(IaC) and GitOps practices while keeping the overall setup as simple as possible.
 
----
-
 ## ⚙️ Tech stack
 
 I am combining these platforms and tools that in my opinion work well with IaC and Gitops practices:
 
-🖥 Hypervisor: `Proxmox`
-💿 Operating System: `Fedora CoreOS`
-📦 Container Engine: `Podman`
-🛠️ Tools: `Terraform`
+- 🖥 Hypervisor: `Proxmox`
+- 💿 Operating System: `Fedora CoreOS`
+- 📦 Container Engine: `Podman`
+- 🛠️ Tools: `Terraform`
 
 ### 🖥 Proxmox
 
-Proxmox offers automation several features such as:
+Proxmox is a well-known hypervisor which offers automation several features such as:
 - A well supported Proxmox Terraform Provider. 
 - Native ignition support through cloud-init and snippets
 
 This allows us to define the entire Fedora CoreOS (FCOS) virtual machine infrastructure as code within a Git repository.
 
+>[!IMPORTANT]
+> I use the `init.ign` in my FCOS snippet directory on PVE. This allows me to automatically grab other iginition files I have setup in my Github repo. I use this approach so that I can automatically pull any changes from my referenced ignition files. It is strongly recommended you create your own `init.ign` with references to your own repository to prevent stuff from breaking.
+
 ### 💿 Fedora CoreOS
 
-Fedora CoreOS (FCOS) is an open-source, automatically updating, minimal and ephemeral operating system designed specifically for running containerized workloads. FCOS has an immmutable filesystem. which means that all configuration is managed declaratively through ignition files (JSON). It comes pre-installed with Podman and Docker and optimized SELinux policies. To me this makes FCOS the perfect OS for running containers without requiring orchestration.
+FCOS has an immmutable filesystem. All configuration is managed declaratively through loading `ignition files` (JSON). You can easily generate these files from `butane files` (YAML). It comes pre-installed with Podman and Docker and optimized SELinux policies. To me this makes FCOS the perfect OS for running containers without requiring orchestration.
 
-To generate ignition files it is a lot easier to first define them as butane files and then convert them. This process is basically a conversion from YAML to JSON. In the `fcos` directory you can find a `build.sh` script which does this conversion for you.
-In here you can also find all the ignition files I use to run my quadlets rootless with data persistence.
+>[!TIP]
+>In the `fcos` directory you can find a `build.sh` script which automatically converts `butane files` to `ignition files` based on directory structure.
 
 ### 📦️ Podman
 
