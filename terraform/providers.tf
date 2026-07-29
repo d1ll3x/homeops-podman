@@ -2,7 +2,6 @@ terraform {
   required_providers {
     proxmox = {
       source  = "bpg/proxmox"
-      version = "~>0.111.0"
     }
   }
   backend "s3" {
@@ -14,6 +13,10 @@ terraform {
 }
 
 provider "proxmox" {
-  endpoint = "https://${pveHost}:8006/api2/json"
-  insecure = true
+  endpoint = var.proxmox_endpoint
+  api_token = var.proxmox_api_token
+  insecure = false
+  ssh {
+    agent = true
+    username = "root"
 }
