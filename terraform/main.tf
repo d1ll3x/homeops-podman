@@ -1,10 +1,16 @@
-module "pve_vm" {
-  source           = "../modules/pve_vm"
-  vm_name          = "nautilus"
-  vm_cpu           = 4
-  vm_ram           = 8096
+module "coreos" {
+  source = "/modules/coreos"
+  vm_name = local.vm.vm_name
+  vm_cpu = local.vm.vm_cpu
+  vm_ram = local.vm.vm_ram
+  vm_ip = local.vm.vm_ip
+  vm_gw = local.vm.vm_gw
 }
 
-output "vm_ip" {
-  value = module.pve_vm.vm_ip
-}
+locals {
+  vm = {
+    vm_name = "nautilus"
+    vm_cpu = 4
+    vm_ram = 8096
+    vm_ip = "192.168.20.100"
+    vm_gateway = "192.168.20.1"

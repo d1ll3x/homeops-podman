@@ -4,12 +4,6 @@ terraform {
       source  = "bpg/proxmox"
     }
   }
-  backend "s3" {
-    bucket = ""
-    key    = ""
-    region = ""
-    profile= ""
-  }
 }
 
 provider "proxmox" {
@@ -19,4 +13,5 @@ provider "proxmox" {
   ssh {
     agent = true
     username = "root"
+  }
 }

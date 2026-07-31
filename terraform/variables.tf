@@ -1,4 +1,4 @@
-variable "proxmox endpoint" {
+variable "proxmox_endpoint" {
   description = "Proxmox API endpoint"
   type        = string
 }
