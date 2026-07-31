@@ -1,0 +1,7 @@
+variant: coreos
+version: 1.7.0
+ignition:
+  config:
+    merge:
+      - source: https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/coreos/ignition/base.ign
+      - source: https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/coreos/ignition/quadlets.ign
