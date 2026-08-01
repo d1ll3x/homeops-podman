@@ -1,0 +1,5 @@
+[tools]
+terraform = "1.15.6"
+github-cli = "2.93.0"
+jq = "1.8.2"
+yq = "4.53.3"
