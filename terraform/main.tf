@@ -12,5 +12,5 @@ locals {
     vm_name = "nautilus"
     vm_cpu = 4
     vm_ram = 8096
-    vm_ip = "192.168.20.100"
+    vm_ip = "192.168.20.100/24"
     vm_gateway = "192.168.20.1"
