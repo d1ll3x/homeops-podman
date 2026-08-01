@@ -9,9 +9,10 @@ terraform {
 provider "proxmox" {
   endpoint  = var.proxmox_endpoint
   api_token = var.proxmox_api_token
-  insecure  = false
+  insecure  = true
   ssh {
-    agent    = true
-    username = "root"
+    agent       = true
+    private_key = file("~/.ssh/id_ed25519")
+    username    = "root"
   }
 }
