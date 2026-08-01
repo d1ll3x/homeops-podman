@@ -8,40 +8,6 @@ passwd:
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIlYo/25hiuBE/m1ja6RLEbGO3y9QVmjNCKNycLW85GV
 
-storage:
-  # Persistence for statefull applications
-  disks:
-    - device: /dev/sdb
-      wipe_table: false
-      partitions:
-      - label: data
-        number: 1
-  filesystems:
-    - path: /var/home/core/.local/share/containers/storage
-      device: /dev/disk/by-partlabel/data
-      format: xfs
-      with_mount_unit: true
-
-  # Directory layout for rootless podman
-  directories:
-    - path: /var/home/core/.config
-      user: { name: core }
-      group: { name: core }
-      mode: 0700
-    - path: /var/home/core/.config/containers
-      user: { name: core }
-      group: { name: core }
-      mode: 0700
-    - path: /var/home/core/.config/containers/systemd
-      user: { name: core }
-      group: { name: core }
-      mode: 0700
-  
-  # Start rootless Quadlets on boot
-  files:
-    - path: /var/lib/systemd/linger/core
-      mode: 0644
-
 # Setup the qemu guest agent
 systemd:
   units:

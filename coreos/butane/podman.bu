@@ -1,0 +1,52 @@
+variant: fcos
+version: 1.7.0
+
+storage:
+  # Persistence for statefull applications
+  disks:
+    - device: /dev/sdb
+      wipe_table: false
+      partitions:
+      - label: data
+        number: 1
+  filesystems:
+    - path: /var/home/core/.local/share/containers/storage
+      device: /dev/disk/by-partlabel/data
+      format: xfs
+      with_mount_unit: true
+
+  # Directory layout for rootless podman
+  directories:
+    - path: /var/home/core/.config
+      user: { name: core }
+      group: { name: core }
+      mode: 0700
+    - path: /var/home/core/.config/containers
+      user: { name: core }
+      group: { name: core }
+      mode: 0700
+    - path: /var/home/core/.config/containers/systemd
+      user: { name: core }
+      group: { name: core }
+      mode: 0700
+    - path: /var/home/core/.local
+      user: { name: core }
+      group: { name: core }
+      mode: 0700
+    - path: /var/home/core/.local/share
+      user: { name: core }
+      group: { name: core }
+      mode: 0700
+    - path: /var/home/core/.local/share/containers
+      user: { name: core }
+      group: { name: core }
+      mode: 0700
+    - path: /var/home/core/.local/share/containers/storage
+      user: { name: core }
+      group: { name: core }
+      mode: 0700
+
+  # Start rootless Quadlets on boot
+  files:
+    - path: /var/lib/systemd/linger/core
+      mode: 0644
