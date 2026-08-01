@@ -3,17 +3,18 @@ resource "proxmox_storage_directory" "coreos" {
   path  = "/var/coreos"
   nodes = [var.node_name]
 
-  content        = ["import", "snippets"]
+  content        = ["image", "snippets"]
   create_subdirs = true
 }
 
 resource "proxmox_download_file" "fedora_coreos_qcow2_img" {
-  content_type            = "import"
+  content_type            = "iso"
   datastore_id            = proxmox_storage_directory.coreos.id
   node_name               = var.node_name
   url                     = "https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/44.20260707.3.1/x86_64/fedora-coreos-44.20260707.3.1-proxmoxve.x86_64.qcow2.xz"
   checksum                = "af91c10531a5205536b2f38f26629842b8c30c003be36a988545ad4cbd8f4f35"
   checksum_algorithm      = "sha256"
+  overwrite               = false
   file_name               = "fedora-coreos-44.20260707.3.1-proxmoxve.x86_64.qcow2.xz.img"
   decompression_algorithm = "zst"
 }
@@ -37,14 +38,15 @@ resource "proxmox_virtual_environment_vm" "coreos_data" {
   on_boot    = false
   protection = true # Protect from accidentally deletion
 
+  scsi_hardware = "virtio-scsi-single"
+
   disk {
-    datastore_id  = var.vm_datastore
-    interface     = "scsi0"
-    scsi_hardware = "virtio-scsi-single"
-    iothread      = true
-    discard       = "on"
-    ssd           = true
-    size          = var.vm_disksize
+    datastore_id = var.vm_datastore
+    interface    = "scsi0"
+    iothread     = true
+    discard      = "on"
+    ssd          = true
+    size         = var.vm_disksize
   }
 }
 
@@ -70,16 +72,17 @@ resource "proxmox_virtual_environment_vm" "coreos_vm" {
     dedicated = var.vm_ram
   }
 
+  scsi_hardware = "virtio-scsi-single"
+
   # Boot disk
   disk {
-    datastore_id  = var.vm_datastore
-    file_id       = proxmox_download_file.fedora_coreos_qcow2_img.id
-    interface     = "scsi0"
-    scsi_hardware = "virtio-scsi-single"
-    iothread      = true
-    discard       = "on"
-    ssd           = true
-    size          = 20
+    datastore_id = var.vm_datastore
+    file_id      = proxmox_download_file.fedora_coreos_qcow2_img.id
+    interface    = "scsi0"
+    iothread     = true
+    discard      = "on"
+    ssd          = true
+    size         = 20
   }
 
   # Attached disk for data persistence
@@ -88,7 +91,6 @@ resource "proxmox_virtual_environment_vm" "coreos_vm" {
     file_format       = proxmox_virtual_environment_vm.coreos_data.disk[0].file_format
     datastore_id      = proxmox_virtual_environment_vm.coreos_data.disk[0].datastore_id
     interface         = "scsi1"
-    scsi_hardware     = proxmox_virtual_environment_vm.coreos_data.disk[0].scsi_hardware
     iothread          = proxmox_virtual_environment_vm.coreos_data.disk[0].iothread
     discard           = proxmox_virtual_environment_vm.coreos_data.disk[0].discard
     ssd               = proxmox_virtual_environment_vm.coreos_data.disk[0].ssd
