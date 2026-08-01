@@ -33,16 +33,6 @@ variable "vm_disksize" {
   default     = 150
 }
 
-variable "vm_ip" {
-  description = "IPv4 address assigned to the VM"
-  type        = string
-}
-
-variable "vm_gw" {
-  description = "Gateway address assigned to the VM"
-  type        = string
-}
-
 variable "vm_datastore" {
   description = "Datastore used for VM storage"
   type        = string

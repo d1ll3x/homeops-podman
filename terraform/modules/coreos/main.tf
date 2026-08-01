@@ -3,7 +3,7 @@ resource "proxmox_storage_directory" "coreos" {
   path  = "/var/coreos"
   nodes = [var.node_name]
 
-  content        = ["image", "snippets"]
+  content        = ["iso", "snippets"]
   create_subdirs = true
 }
 
@@ -25,7 +25,7 @@ resource "proxmox_virtual_environment_file" "coreos_ignition" {
   node_name    = var.node_name
 
   source_file {
-    path      = "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/fcos/ignition/init.ign"
+    path      = "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/coreos/ignition/init.ign"
     file_name = "config.ign"
   }
 }
@@ -103,8 +103,7 @@ resource "proxmox_virtual_environment_vm" "coreos_vm" {
     upgrade             = false
     ip_config {
       ipv4 {
-        address = var.vm_ip
-        gateway = var.vm_gw
+        address = "dhcp"
       }
     }
   }
