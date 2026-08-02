@@ -1,0 +1,8 @@
+variant: fcos
+version: 1.7.0
+ignition:
+  config:
+    merge:
+      - local: coreos/ignition/base.ign
+      - local: coreos/ignition/podman.ign
+      - local: coreos/ignition/quadlets.ign

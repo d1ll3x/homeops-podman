@@ -25,7 +25,7 @@ resource "proxmox_virtual_environment_file" "coreos_ignition" {
   node_name    = var.node_name
 
   source_file {
-    path      = "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/coreos/ignition/init.ign"
+    path      = "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/coreos/ignition/config.ign"
     file_name = "config.ign"
   }
 }
@@ -56,7 +56,7 @@ resource "proxmox_virtual_environment_vm" "coreos_vm" {
   tags      = var.vm_tags
 
   agent {
-    enabled = true # Installed by base ignition file
+    enabled = true
   }
 
   stop_on_destroy = true

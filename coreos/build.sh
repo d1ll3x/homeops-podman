@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 set -euo pipefail
-shopt -s nullglob
+shopt -s nullglob extglob
 
 # Determine container runtime
 if command -v podman >/dev/null 2>&1; then
@@ -14,18 +14,18 @@ else
 fi
 
 # Set CWD to script location
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."
 
-butane_dir="./butane"
-ignition_dir="./ignition"
+butane_dir="./coreos/butane"
+ignition_dir="./coreos/ignition"
 
 # Generate Ignition files
-configs=("$butane_dir"/*.bu)
+configs=("$butane_dir"/!(config).bu "$butane_dir"/config.bu)
 for bu in "${configs[@]}"; do
   name="$(basename "$bu" .bu)"
   echo "Generating ${name}.ign..."
-  "$runtime" run -i --rm quay.io/coreos/butane:release \
-    --pretty --strict < "$bu" > "${ignition_dir}/${name}.ign"
+  "$runtime" run -i --rm -v "$PWD:/files:ro,z" quay.io/coreos/butane:release \
+    --pretty --strict --files-dir /files < "$bu" > "${ignition_dir}/${name}.ign"
   echo "SUCCESS! ${ignition_dir}/${name}.ign"
 done
 
