@@ -11,5 +11,14 @@
         ]
       }
     ]
+  },
+  "systemd": {
+    "units": [
+      {
+        "contents": "[Unit]\nDescription=Ensure qemu-guest-agent is installed\nWants=network-online.target\nAfter=network-online.target\nBefore=zincati.service\nConditionPathExists=!/var/lib/%N.stamp\n\n[Service]\nType=oneshot\nRemainAfterExit=yes\nExecStart=rpm-ostree install --allow-inactive --assumeyes --reboot qemu-guest-agent\nExecStart=/bin/touch /var/lib/%N.stamp\n\n[Install]\nWantedBy=multi-user.target        \n",
+        "enabled": true,
+        "name": "install-qemu-guest-agent.service"
+      }
+    ]
   }
 }

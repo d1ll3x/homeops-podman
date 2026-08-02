@@ -7,3 +7,24 @@ passwd:
     - name: core
       ssh_authorized_keys:
         - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIlYo/25hiuBE/m1ja6RLEbGO3y9QVmjNCKNycLW85GV
+
+systemd:
+  units:
+    - name: "install-qemu-guest-agent.service"
+      enabled: true
+      contents: |
+        [Unit]
+        Description=Ensure qemu-guest-agent is installed
+        Wants=network-online.target
+        After=network-online.target
+        Before=zincati.service
+        ConditionPathExists=!/var/lib/%N.stamp
+
+        [Service]
+        Type=oneshot
+        RemainAfterExit=yes
+        ExecStart=rpm-ostree install --allow-inactive --assumeyes --reboot qemu-guest-agent
+        ExecStart=/bin/touch /var/lib/%N.stamp
+
+        [Install]
+        WantedBy=multi-user.target        
