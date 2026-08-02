@@ -1,4 +1,4 @@
-# 🦭 Running Home Operations with Podman
+# 🦭 Home Operations with Podman
 
 Declarative home infrastructure: a Fedora CoreOS VM on Proxmox, provisioned by Terraform and configured by Ignition, running rootless Podman Quadlets.
 
