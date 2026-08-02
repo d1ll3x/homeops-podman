@@ -1,40 +1,82 @@
-## 🔎 Overview
+# 🦭 Running Home Operations with Podman
 
-This is a mono repository for my podman driven home infrastructure. The goal is to implement Infrastructure as Code(IaC) and GitOps practices while keeping the overall setup as simple as possible.
+Declarative home infrastructure: a Fedora CoreOS VM on Proxmox, provisioned by Terraform and configured by Ignition, running rootless Podman Quadlets.
 
-## ⚙️ Tech stack
+The VM is disposable. All configuration lives in this repository, and the machine pulls it from `main` on every boot — rebuilding is a single Terraform command, and application data survives on a dedicated disk.
 
-I am combining these platforms and tools that in my opinion work well with IaC and Gitops practices:
+## Stack
 
-- 🖥 Hypervisor: `Proxmox`
-- 💿 Operating System: `Fedora CoreOS`
-- 📦 Container Engine: `Podman`
-- 🛠️ Tools: `Terraform`
+| Layer        | Choice                    | Why                                                                        |
+| ------------ | ------------------------- | -------------------------------------------------------------------------- |
+| Hypervisor   | Proxmox VE                | Solid Terraform provider, native Ignition delivery via cloud-init snippets |
+| OS           | Fedora CoreOS             | Immutable, declaratively configured, auto-updating, ships Podman           |
+| Containers   | Podman Quadlets           | Daemonless, rootless, containers managed as systemd units                  |
+| Provisioning | Terraform ([bpg/proxmox]) | Reproducible VM builds with persistent data disks                          |
 
-### 🖥 Proxmox
+[bpg/proxmox]: https://registry.terraform.io/providers/bpg/proxmox/latest/docs
 
-Proxmox is a well-known hypervisor which offers automation several features such as:
-- A well supported Proxmox Terraform Provider. 
-- Native ignition support through cloud-init and snippets
+## Layout
 
-This allows us to define the entire Fedora CoreOS (FCOS) virtual machine infrastructure as code within a Git repository.
+```
+📁 homeops-podman
+├── 📁 coreos       # operating system boot files
+├── 📁 quadlets     # applications
+└── 📁 terraform    # VM definitions
+```
 
->[!IMPORTANT]
-> I use the `init.ign` in my FCOS snippet directory on PVE. This allows me to automatically grab other iginition files I have setup in my Github repo. I use this approach so that I can automatically pull any changes from my referenced ignition files. It is strongly recommended you create your own `init.ign` with references to your own repository to prevent stuff from breaking.
+## How it works
 
-### 💿 Fedora CoreOS
+1. Terraform creates the `coreos` datastore, downloads the FCOS image, and uploads `coreos/ignition/init.ign` to Proxmox as a snippet (`config.ign`).
+2. The snippet is attached as cloud-init **vendor data**, which the FCOS `proxmoxve` Ignition provider reads on first boot.
+3. `init.ign` is only a stub — it merges `base.ign`, `podman.ign`, and `quadlets.ign` directly from `main` over HTTPS.
+4. Ignition partitions and mounts the second disk at the rootless Podman graphroot, drops Quadlet units into `~core/.config/containers/systemd/`, and enables lingering so they start at boot.
 
-FCOS has an immmutable filesystem. All configuration is managed declaratively through loading `ignition files` (JSON). You can easily generate these files from `butane files` (YAML). It comes pre-installed with Podman and Docker and optimized SELinux policies. To me this makes FCOS the perfect OS for running containers without requiring orchestration.
+Because the machine fetches its config from `main` at boot, **`main` is production**. A rebuild is how changes are rolled out.
 
->[!TIP]
->In the `fcos` directory you can find a `build.sh` script which automatically converts `butane files` to `ignition files` based on directory structure.
+## Prerequisites
 
-### 📦️ Podman
+- A Proxmox node with a datastore for VM disks (default: `compute`)
+- A Proxmox API token, and SSH access as `root` to the node (snippet uploads go over SSH, not the API)
+- [mise](https://mise.jdx.dev/) for tooling (`mise install`), plus Podman or Docker to generate Ignition files
 
-I have chosen to run my application workloads on Podman.Podman is inherritently more secure by design compared to Docker since it runs daemonless and supports rootless out-of-the-box. In addition, I like the concept of `quadlets` where all my services just run as a (user) systemd service.
+## Usage
 
-I am specifically running my container workloads `rootless` due to the inherritent security risk that comes from running containers as root. With Podman and FCOS this is as easy as configuring `podman` and `quadlets` at the `~/.config` directory.
+Configure credentials in `terraform/secrets.auto.tfvars` (gitignored):
 
-### TODO: 🛠️ Terraform
+```hcl
+proxmox_endpoint  = "https://proxmox.example.com:8006/"
+proxmox_api_token = "user@pam!token=uuid"
+```
 
-Terraform is ideal to quickly rebuild the FCOS virtual machines and maintaining data persistence. This is achieved by detaching and re-attaching a secondary dedicated data disk for container workloads to FCOS.
+Regenerate Ignition files after editing any Butane config, and commit the result:
+
+```sh
+./coreos/build.sh
+```
+
+Build the VM:
+
+```sh
+cd terraform
+terraform init
+terraform apply
+```
+
+Rebuild it from scratch, picking up the latest configuration from `main`:
+
+```sh
+terraform apply -replace=module.coreos.proxmox_virtual_environment_vm.coreos_vm
+```
+
+The data disk is owned by a separate, protected `<vm_name>-data` VM and is merely attached to the running VM, so replacing the VM never touches it.
+
+## Services
+
+| Service                                    | Description                                      |
+| ------------------------------------------ | ------------------------------------------------ |
+| [Zigbee2MQTT](https://www.zigbee2mqtt.io/) | Zigbee (LAN coordinator) to MQTT bridge, `:8080` |
+
+
+## License
+
+[MIT](LICENSE)
