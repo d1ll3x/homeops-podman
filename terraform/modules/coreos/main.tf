@@ -25,8 +25,8 @@ resource "proxmox_virtual_environment_file" "coreos_ignition" {
   node_name    = var.node_name
 
   source_file {
-    path      = "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/coreos/ignition/config.ign"
-    file_name = "config.ign"
+    path      = "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/coreos/ignition/init.ign"
+    file_name = "init.ign"
   }
 }
 

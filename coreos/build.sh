@@ -20,7 +20,7 @@ butane_dir="./coreos/butane"
 ignition_dir="./coreos/ignition"
 
 # Generate Ignition files
-configs=("$butane_dir"/!(config).bu "$butane_dir"/config.bu)
+configs=("$butane_dir"/!(init).bu "$butane_dir"/init.bu)
 for bu in "${configs[@]}"; do
   name="$(basename "$bu" .bu)"
   echo "Generating ${name}.ign..."
