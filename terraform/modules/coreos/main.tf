@@ -24,8 +24,8 @@ resource "proxmox_virtual_environment_file" "coreos_ignition" {
   datastore_id = proxmox_storage_directory.coreos.id
   node_name    = var.node_name
 
-  source_file {
-    path      = "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/coreos/ignition/init.ign"
+  source_raw {
+    data      = file("${path.module}/../../../coreos/ignition/init.ign")
     file_name = "init.ign"
   }
 }
@@ -123,6 +123,9 @@ resource "proxmox_virtual_environment_vm" "coreos_vm" {
 
   serial_device {}
 
+  lifecycle {
+    replace_triggered_by = [proxmox_virtual_environment_file.coreos_ignition]
+  }
 }
 
 output "vm_ip" {
