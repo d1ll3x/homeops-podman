@@ -16,6 +16,6 @@ storage:
       user: { name: core }
       group: { name: core }
       contents:
-        local: quadlets/z2m/z2m.container
+        local: quadlets/containers/z2m.container
 
 
