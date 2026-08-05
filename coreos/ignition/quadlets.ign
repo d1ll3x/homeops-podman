@@ -8,27 +8,29 @@
         "group": {
           "name": "core"
         },
-        "path": "/var/home/core/.config/containers/systemd/z2m.container",
-        "user": {
-          "name": "core"
-        },
-        "contents": {
-          "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/quadlets/z2m/z2m.container"
-        },
-        "mode": 384
-      },
-      {
-        "group": {
-          "name": "core"
-        },
         "path": "/var/home/core/.config/containers/systemd/iot.network",
         "user": {
           "name": "core"
         },
         "contents": {
-          "source": "https://raw.githubusercontent.com/d1ll3x/homeops-podman/refs/heads/main/quadlets/networks/iot.network"
+          "compression": "",
+          "source": "data:,%5BNetwork%5D%0ANetworkName%3Diot%0ALabel%3Dservice%3Dhome-automation%0A"
         },
         "mode": 420
+      },
+      {
+        "group": {
+          "name": "core"
+        },
+        "path": "/var/home/core/.config/containers/systemd/z2m.container",
+        "user": {
+          "name": "core"
+        },
+        "contents": {
+          "compression": "gzip",
+          "source": "data:;base64,H4sIAAAAAAAC/0yPwWryUBCF9/MUvoCJuJLAXfx/u3Ej0tIWGrIYkzEdcnMnnXtS0acvRS3dDLM4nPN99UtSNPQouXWdoJbCRfuDyHr8BBatJbAmcfp3hHhIgpP5sLQUNUkB9l5AVD/ccw39vjseJVzWI21H7iV01g7ihVo5mKRhKP/sVJEhGbSfD1Hzx94cYbParKqfQ68W52tVVfI0lR2Dq3faXVmCGoobF1H9LP6lrTT0JBnsCBxPfM5E9TZlcIwNvXGCdP/PYZwjdDln8ZvJopMjzxF3se8AAAD//99Q1RseAQAA"
+        },
+        "mode": 384
       }
     ]
   }
