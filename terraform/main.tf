@@ -1,14 +1,11 @@
 module "coreos" {
   source  = "./modules/coreos"
-  vm_name = local.vm.vm_name
-  vm_cpu  = local.vm.vm_cpu
-  vm_ram  = local.vm.vm_ram
+  vm_name = "nautilus"
+  vm_cpu  = 4
+  vm_ram  = 8192
+  vm_mac  = "BC:24:11:05:E2:C5"
 }
 
-locals {
-  vm = {
-    vm_name = "nautilus"
-    vm_cpu  = 4
-    vm_ram  = 8096
-  }
+output "vm_ip" {
+  value = module.coreos.vm_ip
 }
