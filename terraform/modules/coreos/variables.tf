@@ -41,5 +41,5 @@ variable "vm_disksize" {
 
 variable "vm_mac" {
   description = "Assigned MAC address for DHCP reservation"
-  type = string
+  type        = string
 }

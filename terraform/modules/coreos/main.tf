@@ -110,9 +110,9 @@ resource "proxmox_virtual_environment_vm" "coreos_vm" {
 
   # Set the mac_address to allow dhcp reservation
   network_device {
-    bridge   = "vmbr0"
+    bridge      = "vmbr0"
     mac_address = var.vm_mac
-    firewall = true
+    firewall    = true
   }
 
   operating_system {
