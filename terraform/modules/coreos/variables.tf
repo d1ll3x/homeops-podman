@@ -4,6 +4,12 @@ variable "node_name" {
   default     = "pve-1"
 }
 
+variable "vm_datastore" {
+  description = "Datastore used for VM storage"
+  type        = string
+  default     = "compute"
+}
+
 variable "vm_name" {
   description = "Hostname of the VM"
   type        = string
@@ -33,8 +39,7 @@ variable "vm_disksize" {
   default     = 150
 }
 
-variable "vm_datastore" {
-  description = "Datastore used for VM storage"
-  type        = string
-  default     = "compute"
+variable "vm_mac" {
+  description = "Assigned MAC address for DHCP reservation"
+  type = string
 }
