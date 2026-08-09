@@ -26,4 +26,4 @@ systemd:
         ExecStart=/bin/touch /var/lib/%N.stamp
 
         [Install]
-        WantedBy=multi-user.target        
+        WantedBy=multi-user.target
